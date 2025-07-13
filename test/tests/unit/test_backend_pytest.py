@@ -43,15 +43,12 @@ def test_analytics_service():
 
 
 @pytest.mark.asyncio
-async def test_api_endpoints():
-    """Test API endpoints."""
-    base_url = "http://localhost:8000"
+async def test_api_endpoints(client):
+    """Test API endpoints using test client."""
+    # Test root endpoint
+    response = await client.get("/")
+    assert response.status_code == 200, f"Root endpoint should return 200, got {response.status_code}"
     
-    async with httpx.AsyncClient() as client:
-        # Test root endpoint
-        response = await client.get(f"{base_url}/")
-        assert response.status_code == 200, f"Root endpoint should return 200, got {response.status_code}"
-        
-        # Test health endpoint
-        response = await client.get(f"{base_url}/health")
-        assert response.status_code == 200, f"Health endpoint should return 200, got {response.status_code}" 
+    # Test health endpoint
+    response = await client.get("/health")
+    assert response.status_code == 200, f"Health endpoint should return 200, got {response.status_code}" 

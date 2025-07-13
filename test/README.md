@@ -186,13 +186,28 @@ npm run dev
 
 ## 🧪 Testing
 
-### Backend Tests
+### Quick Test Runner
 ```bash
 # Run all tests
-pytest test_backend_pytest.py test_e2e.py -v
+python3 run_tests.py all
 
-# Run specific test file
-pytest test_backend_pytest.py -v
+# Run specific test types
+python3 run_tests.py unit        # Unit tests only
+python3 run_tests.py integration # Integration tests only
+python3 run_tests.py e2e         # End-to-end tests only
+python3 run_tests.py coverage    # With coverage report
+```
+
+### Manual Test Execution
+```bash
+# Backend tests
+python3 tests/integration/test_backend.py
+
+# E2E tests
+python3 tests/e2e/test_e2e.py
+
+# Pytest tests
+pytest tests/ -v
 ```
 
 ### Frontend Tests
@@ -200,6 +215,8 @@ pytest test_backend_pytest.py -v
 cd frontend
 npm test
 ```
+
+For detailed testing information, see [tests/README.md](./tests/README.md).
 
 ## 📁 Project Structure
 
@@ -219,9 +236,16 @@ startup/test/
 │   │   ├── components/    # React components
 │   │   └── lib/           # Utilities & API client
 │   └── public/            # Static assets
+├── tests/                  # 🧪 Test Suite
+│   ├── unit/              # Unit tests (pytest)
+│   ├── integration/       # Integration tests
+│   ├── e2e/              # End-to-end tests
+│   ├── conftest.py       # Pytest configuration
+│   └── README.md         # Test documentation
 ├── docs/                  # 📚 Documentation
-├── tests/                 # 🧪 Test files
-└── requirements.txt       # Python dependencies
+├── run_tests.py          # Test runner script
+├── pytest.ini           # Pytest configuration
+└── requirements.txt      # Python dependencies
 ```
 
 ## 🔄 Data Flow
