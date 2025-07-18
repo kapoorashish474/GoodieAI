@@ -9,6 +9,7 @@ export default function Navigation() {
   const navItems = [
     { href: '/dashboard', label: 'Dashboard' },
     { href: '/explorer', label: 'Explorer' },
+    { href: '/keywords', label: 'Keywords' },
   ];
 
   return (

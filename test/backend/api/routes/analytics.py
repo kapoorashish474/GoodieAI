@@ -10,6 +10,7 @@ from ...database.database import get_db
 from ...database import crud
 from ...schemas import Analytics, Domain, DashboardResponse
 from ...services.analytics_service import AnalyticsService
+from ...database.crud import get_ai_keywords
 
 router = APIRouter()
 
@@ -77,3 +78,10 @@ async def process_story(story_id: int, db: Session = Depends(get_db)):
         "keywords_found": result['keywords'],
         "domain": result['domain']
     } 
+
+
+@router.get("/ai-keywords")
+def list_ai_keywords(db: Session = Depends(get_db)):
+    """Get all AI keywords and their status."""
+    keywords = get_ai_keywords(db)
+    return [{"id": k.id, "keyword": k.keyword, "status": k.status} for k in keywords] 
