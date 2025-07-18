@@ -51,7 +51,10 @@ export default function Dashboard() {
         if (response.data.state === 'SUCCESS') {
           setTaskStatus('Task completed! Refreshing data...');
           clearInterval(interval);
-          setTimeout(fetchDashboardData, 1000);
+          setTimeout(() => {
+            fetchDashboardData();
+            setTimeout(() => setTaskStatus(null), 1500); // Clear status after refresh
+          }, 1000);
         } else if (response.data.state === 'FAILURE') {
           setTaskStatus('Task failed');
           clearInterval(interval);
@@ -65,10 +68,10 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-24 w-24 border-b-4 border-blue-500 mx-auto mb-6"></div>
+          <p className="mt-4 text-xl text-gray-700 font-semibold">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -76,13 +79,13 @@ export default function Dashboard() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-600 text-xl mb-4">Error</div>
-          <p className="text-gray-600 mb-4">{error}</p>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-100">
+        <div className="text-center bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+          <div className="text-red-600 text-2xl font-bold mb-4">Error</div>
+          <p className="text-gray-700 mb-4 text-lg">{error}</p>
           <button
             onClick={fetchDashboardData}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-6 py-2 rounded-full font-semibold shadow hover:from-blue-600 hover:to-purple-600 transition"
           >
             Retry
           </button>
@@ -92,69 +95,67 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Hacker News Analytics Dashboard
-          </h1>
-          <p className="text-gray-600">
-            Real-time analytics for AI-related stories and trends
-          </p>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="mb-6 flex gap-4">
+        <div className="mb-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2 tracking-tight drop-shadow-sm">
+              🚀 Hacker News Analytics
+            </h1>
+            <p className="text-lg text-gray-600 font-medium">
+              Real-time analytics for AI-related stories and trends
+            </p>
+          </div>
           <button
             onClick={triggerFetchStories}
             disabled={taskStatus?.includes('Starting') || taskStatus?.includes('PENDING')}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:from-blue-600 hover:to-purple-600 disabled:opacity-50 transition text-lg"
           >
             Fetch Latest Stories
           </button>
-          {taskStatus && (
-            <div className="text-sm text-gray-600 self-center">
-              {taskStatus}
-            </div>
-          )}
         </div>
+        {taskStatus && (
+          <div className="mb-6 text-center md:text-right text-base text-purple-700 font-medium animate-pulse">
+            {taskStatus}
+          </div>
+        )}
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold text-gray-900">Total Stories</h3>
-            <p className="text-3xl font-bold text-blue-600">{dashboardData?.total_stories || 0}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
+          <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl flex flex-col items-center hover:scale-105 transition-transform">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Total Stories</h3>
+            <p className="text-4xl font-extrabold text-blue-600 drop-shadow">{dashboardData?.total_stories || 0}</p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold text-gray-900">AI Keywords</h3>
-            <p className="text-3xl font-bold text-green-600">{dashboardData?.total_keywords || 0}</p>
+          <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl flex flex-col items-center hover:scale-105 transition-transform">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">AI Keywords</h3>
+            <p className="text-4xl font-extrabold text-green-500 drop-shadow">{dashboardData?.total_keywords || 0}</p>
           </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-semibold text-gray-900">Domains</h3>
-            <p className="text-3xl font-bold text-purple-600">{dashboardData?.total_domains || 0}</p>
+          <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl flex flex-col items-center hover:scale-105 transition-transform">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Domains</h3>
+            <p className="text-4xl font-extrabold text-purple-500 drop-shadow">{dashboardData?.total_domains || 0}</p>
           </div>
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
           {/* Top Keywords Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Top AI Keywords</h3>
+          <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">Top AI Keywords</h3>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={dashboardData?.analytics || []}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="keyword" />
-                <YAxis />
+                <XAxis dataKey="keyword" tick={{ fontSize: 14 }} />
+                <YAxis tick={{ fontSize: 14 }} />
                 <Tooltip />
-                <Bar dataKey="count" fill="#0088FE" />
+                <Bar dataKey="count" fill="#0088FE" radius={[8, 8, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
 
           {/* Top Domains Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold text-gray-900 mb-4">Top Domains</h3>
+          <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+            <h3 className="text-2xl font-bold text-gray-800 mb-6">Top Domains</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -163,7 +164,7 @@ export default function Dashboard() {
                   cy="50%"
                   labelLine={false}
                   label={({ domain, percent }) => `${domain} ${((percent || 0) * 100).toFixed(0)}%`}
-                  outerRadius={80}
+                  outerRadius={90}
                   fill="#8884d8"
                   dataKey="count"
                 >
@@ -178,23 +179,22 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Stories */}
-        <div className="bg-white p-6 rounded-lg shadow">
-          <h3 className="text-xl font-semibold text-gray-900 mb-4">Recent Stories</h3>
-          <div className="space-y-4">
+        <div className="bg-white/80 backdrop-blur-md p-8 rounded-2xl shadow-xl">
+          <h3 className="text-2xl font-bold text-gray-800 mb-6">Recent Stories</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {dashboardData?.stories.map((story) => (
-              <div key={story.id} className="border-b border-gray-200 pb-4 last:border-b-0">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 hover:text-blue-600">
-                      <a href={story.url} target="_blank" rel="noopener noreferrer">
-                        {story.title}
-                      </a>
-                    </h4>
-                    <div className="text-sm text-gray-500 mt-1">
-                      by {story.author} • {new Date(story.time).toLocaleDateString()} • 
-                      {story.score} points • {story.descendants} comments
-                    </div>
-                  </div>
+              <div key={story.id} className="bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-xl p-5 shadow hover:shadow-lg transition flex flex-col h-full">
+                <a href={story.url} target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-blue-700 hover:underline mb-2 line-clamp-2">
+                  {story.title}
+                </a>
+                <div className="flex-1"></div>
+                <div className="flex items-center justify-between mt-4 text-sm text-gray-600">
+                  <span className="font-medium">by {story.author}</span>
+                  <span>{new Date(story.time).toLocaleDateString()}</span>
+                </div>
+                <div className="flex gap-4 mt-2 text-xs text-gray-500">
+                  <span>⭐ {story.score}</span>
+                  <span>💬 {story.descendants}</span>
                 </div>
               </div>
             ))}
