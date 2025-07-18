@@ -35,3 +35,6 @@ class Settings(BaseSettings):
 
 # Global settings instance
 settings = Settings() 
+
+def get_ai_keywords_from_config() -> list[str]:
+    return Settings().AI_KEYWORDS 

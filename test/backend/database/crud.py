@@ -101,3 +101,16 @@ def get_analytics_count(db: Session) -> int:
 def get_domains_count(db: Session) -> int:
     """Get total number of domains."""
     return db.query(models.Domain).count() 
+
+
+def create_ai_keyword(db: Session, keyword: str, status: str = "active") -> models.AIKeyword:
+    """Create a new AI keyword entry."""
+    ai_keyword = models.AIKeyword(keyword=keyword, status=status)
+    db.add(ai_keyword)
+    db.commit()
+    db.refresh(ai_keyword)
+    return ai_keyword
+
+def get_ai_keywords(db: Session):
+    """Get all AI keywords."""
+    return db.query(models.AIKeyword).all() 

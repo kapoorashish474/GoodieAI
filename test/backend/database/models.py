@@ -32,3 +32,12 @@ class Domain(Base):
     
     domain = Column(String(255), primary_key=True, index=True)
     count = Column(Integer, default=0) 
+
+
+class AIKeyword(Base):
+    """Model for storing all AI keywords from config."""
+    __tablename__ = "ai_keywords"
+
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    keyword = Column(String(255), unique=True, nullable=False, index=True)
+    status = Column(String(50), default="active", nullable=False) 

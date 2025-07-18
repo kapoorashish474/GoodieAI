@@ -13,10 +13,25 @@ from backend.database.models import Base
 
 
 def create_tables():
-    """Create database tables."""
+    """Create database tables and populate AI keywords."""
     print("Creating database tables...")
     Base.metadata.create_all(bind=engine)
     print("Database tables created successfully!")
+
+    # Populate AI keywords table
+    from backend.database.database import SessionLocal
+    from backend.database.crud import create_ai_keyword
+    from backend.core.config import get_ai_keywords_from_config
+    session = SessionLocal()
+    keywords = get_ai_keywords_from_config()
+    for kw in keywords:
+        try:
+            create_ai_keyword(session, kw)
+        except Exception as e:
+            # Ignore if already exists or other errors
+            print(f"[INFO] Could not add keyword '{kw}': {e}")
+    session.close()
+    print("AI keywords table populated!")
 
 
 def run_api_server(host: str = "0.0.0.0", port: int = 8000, reload: bool = False):
